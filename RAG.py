@@ -2,9 +2,8 @@ import streamlit as st
 from PyPDF2 import PdfReader
 import os
 from dotenv import load_dotenv
-from langchain_openai import AzureOpenAIEmbeddings
+from langchain_openai import AzureOpenAIEmbeddings, AzureChatOpenAI
 from langchain.prompts import PromptTemplate
-from langchain.chat_models import AzureChatOpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import faiss
 
