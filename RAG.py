@@ -17,10 +17,14 @@ openai_api_base = os.getenv("AZURE_OPENAI_API_ENDPOINT")
 openai_api_version = os.getenv("OPENAI_API_VERSION")
 model_name = os.getenv("MODEL_NAME")
 deployment_name = os.getenv("DEPLOYMENT_NAME")
+
 # Initialize AzureChatOpenAI LLM
 llm = AzureChatOpenAI(
     deployment_name=deployment_name,
-    model_name=model_name
+    model_name=model_name,
+    openai_api_key=openai_api_key,
+    openai_api_base=openai_api_base,
+    openai_api_version=openai_api_version
 )
 
 # Function to load PDF and extract text
@@ -43,7 +47,10 @@ def chunk_pdf(text, chunk_size=1000, chunk_overlap=200):
 # Function to embed chunks using Azure OpenAI embeddings
 def embed_chunks(chunks):
     embeddings = OpenAIEmbeddings(
-        model = "text-embedding-3-large"# Your specific deployment name
+        deployment="TextEmbeddingLarge",  # Your specific deployment name
+        openai_api_key=openai_api_key,
+        openai_api_base=openai_api_base,
+        openai_api_version="text-embedding-3-large"
     )
     embedded_chunks = embeddings.embed_documents([chunk.page_content for chunk in chunks])
     return embedded_chunks
@@ -58,7 +65,10 @@ def store_embeddings(embedded_chunks):
 # Function to embed the user query
 def embed_query(query):
     embeddings = OpenAIEmbeddings(
-        model = "text-embedding-3-large"
+        deployment="TextEmbeddingLarge",  # Your specific deployment name
+        openai_api_key=openai_api_key,
+        openai_api_base=openai_api_base,
+        openai_api_version="text-embedding-3-large"
     )
     embedded_query = embeddings.embed_query(query)
     return embedded_query
