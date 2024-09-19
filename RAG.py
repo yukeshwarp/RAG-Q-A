@@ -17,6 +17,9 @@ openai_api_base = os.getenv("OPENAI_API_BASE")
 openai_api_version = os.getenv("OPENAI_API_VERSION")
 model_name = os.getenv("MODEL_NAME")
 deployment_name = os.getenv("DEPLOYMENT_NAME")
+api_key = "783973291a7c4a74a1120133309860c0"  
+azure_endpoint = "https://theswedes.openai.azure.com/"
+api_version = "2024-02-01"
 # Initialize AzureChatOpenAI LLM
 llm = AzureChatOpenAI(
     deployment_name=deployment_name,
@@ -44,7 +47,10 @@ def chunk_pdf(text, chunk_size=1000, chunk_overlap=200):
 def embed_chunks(chunks):
     embeddings = AzureOpenAIEmbeddings(
         model="text-embedding-3-large",
-        deployment="TextEmbeddingLarge"
+        deployment="TextEmbeddingLarge",
+        api_version=api_version,
+        azure_endpoint=azure_endpoint,
+        openai_api_key=api_key
     )
     embedded_chunks = embeddings.embed_documents([chunk.page_content for chunk in chunks])
     return embedded_chunks
@@ -60,7 +66,10 @@ def store_embeddings(embedded_chunks):
 def embed_query(query):
     embeddings = AzureOpenAIEmbeddings(
         model="text-embedding-3-large",
-        deployment="TextEmbeddingLarge"
+        deployment="TextEmbeddingLarge",
+        api_version=api_version,
+        azure_endpoint=azure_endpoint,
+        openai_api_key=api_key
     )
  
     embedded_query = embeddings.embed_query(query)
