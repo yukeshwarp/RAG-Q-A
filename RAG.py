@@ -44,10 +44,7 @@ def chunk_pdf(text, chunk_size=1000, chunk_overlap=200):
 def embed_chunks(chunks):
     embeddings = AzureOpenAIEmbeddings(
         model="text-embedding-3-large",
-        deployment="TextEmbeddingLarge",
-        api_version=openai_api_version,
-        azure_endpoint=openai_api_base ,
-        openai_api_key=openai_api_key 
+        deployment="TextEmbeddingLarge"
     )
     embedded_chunks = embeddings.embed_documents([chunk.page_content for chunk in chunks])
     return embedded_chunks
@@ -63,10 +60,7 @@ def store_embeddings(embedded_chunks):
 def embed_query(query):
     embeddings = AzureOpenAIEmbeddings(
         model="text-embedding-3-large",
-        deployment="TextEmbeddingLarge",
-        api_version=openai_api_version,
-        azure_endpoint=openai_api_base ,
-        openai_api_key=openai_api_key 
+        deployment="TextEmbeddingLarge"
     )
  
     embedded_query = embeddings.embed_query(query)
