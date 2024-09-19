@@ -46,7 +46,8 @@ def embed_chunks(chunks):
         openai_api_key=openai_api_key,
         openai_api_base=openai_api_base,
         openai_api_version="1",
-        deployment="TextEmbeddingLarge"  # Your specific deployment name
+        deployment="TextEmbeddingLarge" ,
+        model = "text-embedding-3-large"# Your specific deployment name
     )
     embedded_chunks = embeddings.embed_documents([chunk.page_content for chunk in chunks])
     return embedded_chunks
@@ -64,7 +65,8 @@ def embed_query(query):
         openai_api_key=openai_api_key,
         openai_api_base=openai_api_base,
         openai_api_version="1",
-        deployment="TextEmbeddingLarge"
+        deployment="TextEmbeddingLarge",
+        model = "text-embedding-3-large"
     )
     embedded_query = embeddings.embed_query(query)
     return embedded_query
