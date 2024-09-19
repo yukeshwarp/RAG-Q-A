@@ -13,7 +13,7 @@ load_dotenv()
 
 # Now retrieve the environment variables
 openai_api_key = os.getenv("OPENAI_API_KEY")
-openai_api_base = os.getenv("AZURE_OPENAI_API_ENDPOINT")
+openai_api_base = os.getenv("OPENAI_API_BASE")
 openai_api_version = os.getenv("OPENAI_API_VERSION")
 model_name = os.getenv("MODEL_NAME")
 deployment_name = os.getenv("DEPLOYMENT_NAME")
