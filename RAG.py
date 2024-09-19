@@ -17,14 +17,10 @@ openai_api_base = os.getenv("AZURE_OPENAI_API_ENDPOINT")
 openai_api_version = os.getenv("OPENAI_API_VERSION")
 model_name = os.getenv("MODEL_NAME")
 deployment_name = os.getenv("DEPLOYMENT_NAME")
-
 # Initialize AzureChatOpenAI LLM
 llm = AzureChatOpenAI(
     deployment_name=deployment_name,
-    model_name=model_name,
-    openai_api_key=openai_api_key,
-    openai_api_base=openai_api_base,
-    openai_api_version=openai_api_version
+    model_name=model_name
 )
 
 # Function to load PDF and extract text
