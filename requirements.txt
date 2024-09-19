@@ -2,6 +2,7 @@ streamlit
 PyPDF2
 python-dotenv
 langchain==0.0.325
+langchain-openai
 openai==0.27.8
 faiss-cpu
 tiktoken
