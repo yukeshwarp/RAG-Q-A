@@ -2,10 +2,10 @@ import streamlit as st
 from PyPDF2 import PdfReader
 import os
 from dotenv import load_dotenv
+from langchain_openai import AzureOpenAIEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.chat_models import AzureChatOpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
 import faiss
 
 # Load environment variables from .env file
@@ -42,11 +42,12 @@ def chunk_pdf(text, chunk_size=1000, chunk_overlap=200):
 
 # Function to embed chunks using Azure OpenAI embeddings
 def embed_chunks(chunks):
-    embeddings = OpenAIEmbeddings(
-        deployment="TextEmbeddingLarge",  # Your specific deployment name
-        openai_api_key=openai_api_key,
-        openai_api_base=openai_api_base,
-        openai_api_version="text-embedding-3-large"
+    embeddings = AzureOpenAIEmbeddings(
+        model="text-embedding-3-large",
+        deployment="TextEmbeddingLarge",
+        api_version=openai_api_version,
+        azure_endpoint=openai_api_base ,
+        openai_api_key=openai_api_key 
     )
     embedded_chunks = embeddings.embed_documents([chunk.page_content for chunk in chunks])
     return embedded_chunks
@@ -60,12 +61,14 @@ def store_embeddings(embedded_chunks):
 
 # Function to embed the user query
 def embed_query(query):
-    embeddings = OpenAIEmbeddings(
-        deployment="TextEmbeddingLarge",  # Your specific deployment name
-        openai_api_key=openai_api_key,
-        openai_api_base=openai_api_base,
-        openai_api_version="text-embedding-3-large"
+    embeddings = AzureOpenAIEmbeddings(
+        model="text-embedding-3-large",
+        deployment="TextEmbeddingLarge",
+        api_version=openai_api_version,
+        azure_endpoint=openai_api_base ,
+        openai_api_key=openai_api_key 
     )
+ 
     embedded_query = embeddings.embed_query(query)
     return embedded_query
 
