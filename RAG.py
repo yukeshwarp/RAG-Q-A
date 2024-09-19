@@ -3,7 +3,7 @@ from PyPDF2 import PdfReader
 import os
 from dotenv import load_dotenv
 from langchain.prompts import PromptTemplate
-from langchain_openai import AzureChatOpenAI
+from langchain.chat_models import AzureChatOpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 import faiss
@@ -11,10 +11,15 @@ import faiss
 # Load environment variables from .env file
 load_dotenv()
 
-# Initialize AzureChatOpenAI LLM
+# Now retrieve the environment variables
+openai_api_key = os.getenv("OPENAI_API_KEY")
+openai_api_base = os.getenv("AZURE_OPENAI_API_ENDPOINT")
+openai_api_version = os.getenv("OPENAI_API_VERSION")
 model_name = os.getenv("MODEL_NAME")
+deployment_name = os.getenv("DEPLOYMENT_NAME")
+# Initialize AzureChatOpenAI LLM
 llm = AzureChatOpenAI(
-    deployment_name=model_name,
+    deployment_name=deployment_name,
     model_name=model_name
 )
 
@@ -35,9 +40,14 @@ def chunk_pdf(text, chunk_size=1000, chunk_overlap=200):
     chunks = text_splitter.create_documents([text])
     return chunks
 
-# Function to embed chunks
+# Function to embed chunks using Azure OpenAI embeddings
 def embed_chunks(chunks):
-    embeddings = OpenAIEmbeddings(deployment_name="azure-openai-deployment")
+    embeddings = OpenAIEmbeddings(
+        openai_api_key=openai_api_key,
+        openai_api_base=openai_api_base,
+        openai_api_version="1",
+        deployment="TextEmbeddingLarge"  # Your specific deployment name
+    )
     embedded_chunks = embeddings.embed_documents([chunk.page_content for chunk in chunks])
     return embedded_chunks
 
@@ -50,7 +60,12 @@ def store_embeddings(embedded_chunks):
 
 # Function to embed the user query
 def embed_query(query):
-    embeddings = OpenAIEmbeddings(deployment_name="azure-openai-deployment")
+    embeddings = OpenAIEmbeddings(
+        openai_api_key=openai_api_key,
+        openai_api_base=openai_api_base,
+        openai_api_version="1",
+        deployment="TextEmbeddingLarge"
+    )
     embedded_query = embeddings.embed_query(query)
     return embedded_query
 
@@ -69,7 +84,7 @@ def retrieve_chunks(chunks, top_indices):
 def generate_answer_with_template(context, query):
     prompt_template = PromptTemplate(
         input_variables=["context", "question"],
-        template="""
+        template="""\
         Use the following context to answer the question.
 
         Context: {context}
